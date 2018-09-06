@@ -232,4 +232,4 @@ async def spam(ctx,content:str,*,times:int):
 
 
 
-bot.run('NDczMDQxODY5MTcwMDE2MjY2.DkAjwg.iIYWAqt7s0ocTdw4PWb3DJsI-zc')
+bot.run('token')
