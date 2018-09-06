@@ -4,17 +4,20 @@ import os
 from discord.ext import commands
 from discord.ext.commands import Bot
 import asyncio
+import random
 
 
 bot = commands.Bot(command_prefix = "pl")
 bot.remove_command('help')
 os.chdir(r'C:\Users\user\Desktop\python.coding')
+def is_digit(msg):
+    return msg.content.isdigit()
 
 
-
+#'beta phase,running on {} servers'.format(len(bot.servers)),type=3)
 @bot.event
 async def on_ready():
-    await bot.change_presence(game=discord.Game(name='beta phase,running on {} servers'.format(len(bot.servers)),type=3))
+    await bot.change_presence(game=discord.Game(name='please do plapology!',type=2))
     print('logged in as',bot.user.name,'with an id of',bot.user.id,'!')
 
 @bot.event
@@ -34,7 +37,7 @@ async def on_message(message):
         users = json.load(f)
     await bot.process_commands(message)
     if message.author != message.author.bot:
-     print('{}:{}'.format(message.author,message.content))
+     print('[{}]{}'.format(message.author,message.content))
      if message.content.upper().startswith('OOFS'):
        await bot.send_message(message.channel,'oof!')
      elif message.content.upper().startswith('UNDERSTANDABLE'):
@@ -46,6 +49,10 @@ async def on_message(message):
              await bot.send_message(message.channel,'you are not my daddy :cri:')
      if message.content.upper().startswith('VORTEX'):
         await bot.send_message(message.channel,'is gay')
+     elif message.content.upper().startswith('WHOISAFAG'):
+         await bot.send_message(message.channel,'plary is :D')
+     elif message.content.upper().startswith('BUDDIN'):
+         await bot.send_message(message.channel,'https://media.discordapp.net/attachments/257695856986292224/481554460741730324/b.gif https://media.discordapp.net/attachments/257695856986292224/481554509814956037/al.gif https://media.discordapp.net/attachments/257695856986292224/481554525342269440/di.gif')
 
     await update_data(users, message.author)
     await add_experience(users,message.author,5)
@@ -88,7 +95,9 @@ async def rank(ctx,user:discord.Member):
      except:
       await bot.say('{} is not ranked yet!'.format(user))
 
-
+@bot.command(pass_context=True)
+async def apology(ctx):
+    await bot.say('Hello,my name is Plary#3400.As of the apology,a bot attack happened in 18 August 2018.As the owner of the bot,I am highly sorry for what happened during that time.We found out the reason behind this problem,which is hacking caused on github.I will try to improve this bot security and then make this bot a better bot than usual.As always,sorry for what happened.')
 
 @bot.command(pass_context=True)  #say hi to the bot
 async def greets(ctx):
@@ -141,7 +150,7 @@ async def ping(ctx):
 
 @bot.command(pass_context=True) #returns the output as the user sends
 async def say(ctx,*,content:str):
-    await bot.delete_message(ctx)
+    await bot.delete_message(ctx.message)
     await bot.say(content)
 
 
@@ -212,24 +221,60 @@ async def shoutouts(ctx):
     await bot.say(embed=embed)
 
 @bot.command(pass_context=True)
-async def spam(ctx,content:str,*,times:int):
-    try:
+async def spam(ctx,times:int,*,content:str):
+    if times != None:
      if times <= 10:
-       for spams in range(times):
-           await bot.say(content)
+         for spams in range(times):
+             await bot.say(content)
      else:
-         await bot.say('haha no')
-    except:
-         await bot.say('you forgot how many lines you want to spam(less than 11)')
+          await bot.say('haha no')
+    else:
+        await bot.say('forgot one argument')
+
+
+@bot.command(pass_context=True)
+async def bombping(ctx,user:discord.Member):
+    await bot.say((user.mention)*15)
+
+
+@bot.command(pass_context=True)
+async def delete(ctx):
+    await bot.delete_message(ctx)
+    await bot.say('deleted!')
+
+@bot.command(pass_context=True)
+async def getserverid(ctx):
+    await bot.say('{}'.format(ctx.message.server.id))
+
+@bot.command(pass_context=True)
+async def premiumserver(ctx):
+    servers = ['152977006978531329','399460952359305219','475209454447755275']
+    if ctx.message.server.id in servers:
+        await bot.send_message(ctx.message.channel,'This server is premium!')
+    else:
+        await bot.send_message(ctx.message.channel,'This server is not premium!')
+
+@bot.command(pass_context=True)
+async def guess(ctx):
+    correct = random.randint(1,10)
+    print(correct)
+    await bot.say('put a number between 1 and 10')
+    for chance in range(1,6):
+     msg = await bot.wait_for_message(check=is_digit)
+     answer = int(msg.content)
+     if answer > correct:
+          await bot.say('the anwser is smaller than the correct one.You only have {} use(s) left!'.format(5 - chance))
+     elif answer < correct:
+          await bot.say('the anwser is larger than the correct one.You only have {} use(s) left!'.format(5 - chance))
+     elif answer == correct:
+         await bot.say('congrats,you got the right number!')
+         return None
+     else:
+         await bot.say('sorry,the anwser was {}'.format(correct))
+         return None
 
 
 
 
 
-
-
-
-
-
-
-bot.run('token')
+bot.run('TOKEN')
