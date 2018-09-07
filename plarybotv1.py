@@ -9,6 +9,7 @@ import random
 
 bot = commands.Bot(command_prefix = "pl")
 bot.remove_command('help')
+os.chdir(r'C:\Users\user\Desktop\python.coding')
 def is_digit(msg):
     return msg.content.isdigit()
 
