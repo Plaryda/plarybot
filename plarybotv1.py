@@ -1,24 +1,40 @@
+
 import discord
 import json
 import os
 from discord.ext import commands
-from discord.ext.commands import Bot
 import asyncio
 import random
+import time
+from time import sleep
 
 
 bot = commands.Bot(command_prefix = "pl")
 bot.remove_command('help')
-os.chdir(r'C:\Users\user\Desktop\python.coding')
+f = open(r'users.json') # solve dir as python script
+f = open(r'\Users\user\Desktop\python.coding') # sub solder in same dir as script then to file
 def is_digit(msg):
     return msg.content.isdigit()
+
+extensions = ['CommandErrorHandler','Music']
+
 
 
 #'beta phase,running on {} servers'.format(len(bot.servers)),type=3)
 @bot.event
 async def on_ready():
-    await bot.change_presence(game=discord.Game(name='please do plapology!',type=2))
+    await bot.change_presence(game=discord.Game(name='{} servers'.format(len(bot.servers)),type=3))
     print('logged in as',bot.user.name,'with an id of',bot.user.id,'!')
+
+if __name__ == '__main__':
+    for extension in extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as error:
+            print('{} cannot be loaded [{}]'.format(extension,error))
+
+
+
 
 @bot.event
 async def on_member_join(member):
@@ -51,7 +67,7 @@ async def on_message(message):
         await bot.send_message(message.channel,'is gay')
      elif message.content.upper().startswith('WHOISAFAG'):
          await bot.send_message(message.channel,'plary is :D')
-     elif message.content.upper().startswith('BUDDIN'):
+     elif message.content.upper().startswith('BALDI'):
          await bot.send_message(message.channel,'https://media.discordapp.net/attachments/257695856986292224/481554460741730324/b.gif https://media.discordapp.net/attachments/257695856986292224/481554509814956037/al.gif https://media.discordapp.net/attachments/257695856986292224/481554525342269440/di.gif')
 
     await update_data(users, message.author)
@@ -77,7 +93,7 @@ async def level_up(users,user,channel):
     lvl_end = int(experience ** (1/4))
 
     if lvl_start < lvl_end:
-        if user.mention != user.bot:
+        if user.mention != user.id.bot:
          await bot.send_message(channel,'{} has leveled up to level {}'.format(user.mention,lvl_end))
          users[user.id]['level'] = lvl_end
 
@@ -87,22 +103,37 @@ async def level_up(users,user,channel):
 async def rank(ctx,user:discord.Member):
     with open('users.json', 'r') as f:
      try:
+      vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322','424972995535306763']
       data = json.load(f)
       embed = discord.Embed(title='Name User', description='{}'.format(user), color=0xeee657)
       embed.add_field(name='Level:',value='{}'.format((data[user.id]['level'])))
+      embed.add_field(name='Premium:',value='{}'.format(user.id in vip))
       embed.set_footer(text='Note that it is a global rank we will add ranking soon :)')
+      embed.set_thumbnail(url=user.avatar_url)
       await bot.say(embed=embed)
      except:
       await bot.say('{} is not ranked yet!'.format(user))
 
-@bot.command(pass_context=True)
-async def apology(ctx):
-    await bot.say('Hello,my name is Plary#3400.As of the apology,a bot attack happened in 18 August 2018.As the owner of the bot,I am highly sorry for what happened during that time.We found out the reason behind this problem,which is hacking caused on github.I will try to improve this bot security and then make this bot a better bot than usual.As always,sorry for what happened.')
+@bot.command()
+async def load(extension):
+    try:
+        bot.load_extension(extension)
+        print('loaded {}'.format(extension))
+    except Exception as error:
+        print('{} cannot be loaded [{}]'.format(extension,error))
 
-@bot.command(pass_context=True)  #say hi to the bot
-async def greets(ctx):
-      await bot.say("yo hi")
-      print('bot has been sucessfully greeted someone!')
+@bot.command()
+async def unload(extension):
+    try:
+        bot.unload_extension(extension)
+        print('unloaded {}'.format(extension))
+    except Exception as error:
+        print('{} cannot be unloaded [{}]'.format(extension,error))
+
+@bot.command(pass_context=True)
+async def coinflip(ctx):
+    anwser = ['heads!','tails!']
+    await bot.say(random.choice(anwser))
 
 @bot.command(pass_context=True)  #information about the bot
 async def info(ctx):
@@ -116,7 +147,10 @@ async def info(ctx):
 
     embed.add_field(name='Help server:', value='https://discord.gg/NCvabEC')
 
+    embed.set_thumbnail(url='https://cdn.discordapp.com/avatars/152976541373038592/5dcd9767b0b98b8b15411420d00d1270.png?size=1024')
+
     embed.set_footer(text='having problems?come contact Plary#3400 in DMs!')
+
 
     await bot.say(embed=embed)
     print("someone checked the info!")
@@ -154,6 +188,13 @@ async def say(ctx,*,content:str):
     await bot.say(content)
 
 
+
+
+
+
+
+
+
 @bot.command(pass_context=True) #funny meme,maybe
 async def isay(ctx, user:discord.Member,*,content:str):
     await bot.say('{} says "{}"'.format(user.name,content))
@@ -169,25 +210,9 @@ async def help(ctx):
 
     embed.set_author(name='help')
 
-    embed.add_field(name='greets',value='say hi to the bot!', inline=False)
+    embed.add_field(name='Fun',value='``plspam [limit<=10] [message]`` - spams,duh!\n``isay [user] [content]`` - great troll!\n``mythtime`` - will ping you at random time!\n``rps [rock,paper,scissors]`` - plays the rock paper scissors game\n``guess`` - a simple guess game\n``say`` - make the bot to say what you want!\n``bombping [user]`` - pings a user 15 times in one line\n ``coinflip - head or tails?')
 
-    embed.add_field(name='info ',value='tells you about the bot!', inline=False)
-
-    embed.add_field(name='about [user]',value='tells you information about a user', inline=False)
-
-    embed.add_field(name='ping',value='returns ping', inline=False)
-
-    embed.add_field(name='say [any words]',value='bot says what the user types', inline=False)
-
-    embed.add_field(name='rank [user]', value='tells you about your current rank!', inline=False)
-
-    embed.add_field(name='isay [any words]',value='funny meme', inline=False)
-
-    embed.add_field(name='serverinfo',value='information about the server',inline=False)
-
-    embed.add_field(name='shoutouts', value='list of cool people who helped for this develepment', inline=False)
-
-    embed.add_field(name='spam [message] [number less than 11]',value='spams whatever you want!')
+    embed.add_field(name='Utility',value='``serverinfo`` - information about the server\n``info`` - information about the bot\n``shoutouts`` - list of cool people who helped in this bot\n``rank [user]`` - shows a rank of a user\n``premium`` - shows a premium server\n``ping`` pings you')
 
     embed.set_footer(text='having problems? dm plary#3400 or join the help server!Server link = https://discord.gg/NCvabEC')
 
@@ -196,6 +221,7 @@ async def help(ctx):
 
 @bot.command(pass_context=True)
 async def serverinfo(ctx):
+    servers = ['152977006978531329','399460952359305219','475209454447755275','424972995535306763']
     embed = discord.Embed(name="{}'s info".format(ctx.message.server.name), description="Here's what I could find.", color=0x00ff00)
     embed.set_author(name="{}".format(ctx.message.server.name))
     embed.add_field(name="Name", value=ctx.message.server.name, inline=True)
@@ -204,6 +230,7 @@ async def serverinfo(ctx):
     embed.add_field(name='owner:',value=ctx.message.server.owner)
     embed.add_field(name='Region:',value=ctx.message.server.region)
     embed.add_field(name="Members", value=len(ctx.message.server.members))
+    embed.add_field(name='Premium',value='{}'.format(ctx.message.server.id in servers))
     embed.set_thumbnail(url=ctx.message.server.icon_url)
     await bot.say(embed=embed)
 
@@ -211,12 +238,13 @@ async def serverinfo(ctx):
 async def shoutouts(ctx):
     embed = discord.Embed(title='Thanks to:', description='list of people who helped throught the build of this bot', color=0xeee657)
     embed.add_field(name='BlueWateryLemon#8396',value='Best friend who likes to use Plaryboat',inline=False)
-    embed.add_field(name='TZY#9517',value='Always test new commands with the owner!',inline=False)
+    embed.add_field(name='TZY13#9517',value='Always test new commands with the owner!',inline=False)
     embed.add_field(name='Chronicle-Anarchy#6452',value='Likes to roast but then hes supporting',inline=False)
     embed.add_field(name='God Sans#0792',value='Likes to support alot which is cool',inline=False)
     embed.add_field(name='BUDDIN#6575',value='Likes to use my commands too',inline=False)
     embed.add_field(name='IcyxXxRexyxXx#9521',value='likes to support on moderating and commands',inline=False)
     embed.add_field(name='BEEP#1844',value='he likes to do commands and supports on this',inline=False)
+    embed.add_field(name='Adib Rafique',value='he is cool and helps to test only games',inline=False)
     embed.set_footer(text='I love you guys all no homo uwu')
     await bot.say(embed=embed)
 
@@ -227,9 +255,51 @@ async def spam(ctx,times:int,*,content:str):
          for spams in range(times):
              await bot.say(content)
      else:
-          await bot.say('haha no')
+          await bot.say('max is 10,says god sans')
     else:
         await bot.say('forgot one argument')
+
+@bot.command(pass_context=True)
+async def rps(ctx,anwser:str):
+    anwsers = ['rock','paper','scissors']
+    anwsers2 = anwsers[random.randint(0,2)]
+    print(anwsers2)
+    #rock beats scissors
+    #scissors beats paper
+    #paper beats rock
+    #if [x] fights with non default than[y],[x] will lose.
+    if anwser == anwsers2:
+        await bot.say('its a tie!, i chose {} and so is you!'.format(anwsers2))
+    elif anwser == 'rock':
+        if anwsers2 == 'scissors':
+            await bot.say('hah!,you won!') #[x] beats [y]
+        else:
+            await bot.say('ayy lmao you lost,i chose {}'.format(anwsers2)) #non default
+    elif anwser == 'paper':
+        if anwsers2 == 'rock':
+            await bot.say('hah!,you won!')
+        else:
+            await bot.say('ayy lmao you lost,i chose {}.'.format(anwsers2))
+    else:
+        if anwser == 'scissors':
+            if anwsers2 == 'paper':
+                await bot.say('hah!,you won!')
+            else:
+                await bot.say('ayy lmao you lost,i chose {}.'.format(anwsers2))
+
+@bot.command(pass_context=True) #makes to ping user when reached [myth2]s
+async def mythtime(ctx):
+    while True:
+        await bot.say('the time starts now,what could it be?')
+        myth2 = random.randint(1,10)
+        for myth in range(myth2):
+            sleep(1)
+            if myth == myth2 - 1:
+                await bot.say('your random timer ended at ``{}s``!'.format(myth2))
+                return False
+
+
+
 
 
 @bot.command(pass_context=True)
@@ -237,18 +307,15 @@ async def bombping(ctx,user:discord.Member):
     await bot.say((user.mention)*15)
 
 
-@bot.command(pass_context=True)
-async def delete(ctx):
-    await bot.delete_message(ctx)
-    await bot.say('deleted!')
+
 
 @bot.command(pass_context=True)
 async def getserverid(ctx):
     await bot.say('{}'.format(ctx.message.server.id))
 
 @bot.command(pass_context=True)
-async def premiumserver(ctx):
-    servers = ['152977006978531329','399460952359305219','475209454447755275']
+async def premium(ctx):
+    servers = ['152977006978531329','399460952359305219','475209454447755275','424972995535306763']
     if ctx.message.server.id in servers:
         await bot.send_message(ctx.message.channel,'This server is premium!')
     else:
@@ -256,22 +323,122 @@ async def premiumserver(ctx):
 
 @bot.command(pass_context=True)
 async def guess(ctx):
-    correct = random.randint(1,10)
-    print(correct)
-    await bot.say('put a number between 1 and 10')
-    for chance in range(1,6):
-     msg = await bot.wait_for_message(check=is_digit)
-     answer = int(msg.content)
-     if answer > correct:
-          await bot.say('the anwser is smaller than the correct one.You only have {} use(s) left!'.format(5 - chance))
-     elif answer < correct:
-          await bot.say('the anwser is larger than the correct one.You only have {} use(s) left!'.format(5 - chance))
-     elif answer == correct:
-         await bot.say('congrats,you got the right number!')
-         return None
-     else:
-         await bot.say('sorry,the anwser was {}'.format(correct))
-         return None
+    if ctx.message.author.id != '152976541373038592':
+        await bot.say('the command is temporaily disabled!')
+    else:
+        correct = random.randint(1,10)
+        print(correct)
+        await bot.say('put a number between 1 and 10')
+        for chance in range(1,4):
+            while True:
+                msg = await bot.wait_for_message(check=is_digit)
+                answer = int(msg.content)
+                if answer > correct:
+                    await bot.say('the anwser is smaller than the correct one.You only have {} use(s) left!'.format(4 - chance))
+                elif answer < correct:
+                    await bot.say('the anwser is larger than the correct one.You only have {} use(s) left!'.format(4 - chance))
+                elif answer == correct:
+                    await bot.say('congrats,you got the right number!')
+                    return False
+                else:
+                    await bot.say('sorry,the anwser was {}'.format(correct))
+                    return False
+
+
+@bot.command(pass_context=True)
+async def timer(ctx,time:int):
+    userID = ctx.message.author.id
+    await bot.say('starting the timer from ``{}s`` now!'.format(time))
+    while True:
+        for woahs in range(time + 2):
+            sleep(1)
+            if woahs == time - 1:
+                await bot.say('Hey <@{}>,time is up! you started from ``{}s``!'.format(userID,time))
+                return False
+
+@bot.command(pass_context=True)
+async def vipcheck(ctx,user:discord.Member):
+    vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322']
+    if user.id in vip:
+        await bot.say('he/she are vip,cool!')
+    else:
+        await bot.say('he/she are not vip cri')
+    if ctx.message.author.id == user.id in vip:
+        await bot.say('you are vip,cool!')
+    else:
+        await bot.say('you are not vip,cri')
+
+@bot.command(pass_context=True)
+async def checkmessages(ctx):
+    while ctx.message.author.id == '152976541373038592':
+        await bot.say('the bot is currently sending {} messages'.format(len(bot.messages)))
+        return False
+
+
+@bot.command(pass_context=True)
+@commands.cooldown(1,30,commands.BucketType.channel)
+async def testcooldown(ctx):
+         await bot.say('yeet')
+
+@testcooldown.error
+async def testcooldown_handler(ctx,error):
+    if isinstance(error, commands.CommandOnCooldown):
+        print('command used!')
+        if error.param.name == 'ctx':
+            await bot.send("the command is in cooldown")
+
+#https://gist.github.com/EvieePy/7822af90858ef65012ea500bcecf1612
+
+
+#
+#  """Below is an example of a Local Error Handler for our command do_repeat"""
+# @commands.command(name='repeat', aliases=['mimic', 'copy'])
+# async def do_repeat(self, ctx, *, inp: str):
+#         """A simple command which repeats your input!
+#         inp  : The input to be repeated"""
+#
+#     await ctx.send(inp)
+#
+# @do_repeat.error
+# async def do_repeat_handler(self, ctx, error):
+#         """A local Error Handler for our command do_repeat.
+#         This will only listen for errors in do_repeat.
+#         The global on_command_error will still be invoked after."""
+#
+#         # Check if our required argument inp is missing.
+#     if isinstance(error, commands.MissingRequiredArgument):
+#         if error.param.name == 'inp':
+#             await ctx.send("You forgot to give me input to repeat!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
