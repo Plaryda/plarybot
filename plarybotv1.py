@@ -1,4 +1,3 @@
-
 import discord
 import json
 import os
@@ -23,7 +22,7 @@ extensions = ['CommandErrorHandler','Music']
 #'beta phase,running on {} servers'.format(len(bot.servers)),type=3)
 @bot.event
 async def on_ready():
-    await bot.change_presence(game=discord.Game(name='{} servers'.format(len(bot.servers)),type=3))
+    await bot.change_presence(game=discord.Game(name='{} servers  || bot is 24/7!'.format(len(bot.servers)),type=3))
     print('logged in as',bot.user.name,'with an id of',bot.user.id,'!')
 
 if __name__ == '__main__':
@@ -93,7 +92,6 @@ async def level_up(users,user,channel):
     lvl_end = int(experience ** (1/4))
 
     if lvl_start < lvl_end:
-        if user.mention != user.id.bot:
          await bot.send_message(channel,'{} has leveled up to level {}'.format(user.mention,lvl_end))
          users[user.id]['level'] = lvl_end
 
@@ -409,35 +407,6 @@ async def testcooldown_handler(ctx,error):
 #     if isinstance(error, commands.MissingRequiredArgument):
 #         if error.param.name == 'inp':
 #             await ctx.send("You forgot to give me input to repeat!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
