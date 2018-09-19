@@ -7,12 +7,12 @@ import asyncio
 import random
 import time
 from time import sleep
+import pathlib
 
 
 bot = commands.Bot(command_prefix = "pl")
 bot.remove_command('help')
-f = open(r'users.json') # solve dir as python script
-f = open(r'\Users\user\Desktop\python.coding') # sub solder in same dir as script then to file
+user_path = pathlib.Path(__file__).parent.joinpath('users.json')
 def is_digit(msg):
     return msg.content.isdigit()
 
