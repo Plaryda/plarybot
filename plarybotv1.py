@@ -248,15 +248,24 @@ async def shoutouts(ctx):
 
 @bot.command(pass_context=True)
 async def spam(ctx,times:int,*,content:str):
-    if times != None:
-     if times <= 10:
-         for spams in range(times):
-             await bot.say(content)
-     else:
-          await bot.say('max is 10,says god sans')
+    if ctx.message.author.id != 152976541373038592:
+        await bot.say('this command is temporaily disabled!')
     else:
-        await bot.say('forgot one argument')
-
+        if times != None:
+            if times <= 10:
+                for spams in range(times):
+                    await bot.say(content)
+            else:
+                await bot.say('max is 10,says god sans')
+        else:
+            await bot.say('forgot one argument')
+            
+@bot.command(pass_context=True)
+async def changelog(ctx):
+    text = '``19/9`` - bot is officially 24/7!\n``20/9`` - this command is created;fixed plguess and disabled plspam for time being'
+    await bot.say(text)
+            
+              
 @bot.command(pass_context=True)
 async def rps(ctx,anwser:str):
     anwsers = ['rock','paper','scissors']
