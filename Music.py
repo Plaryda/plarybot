@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
+
 
 # """music commands for Plaryboat
 #   credits to Lucas Kumara for all heads up"""
@@ -24,4 +24,4 @@ class Music:
 
 
 def setup(bot):
-    bot.add_cog(Music(Bot))
+    bot.add_cog(Music(bot))
