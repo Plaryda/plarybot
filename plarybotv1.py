@@ -327,20 +327,22 @@ async def guess(ctx):
         correct = random.randint(1,10)
         print(correct)
         await bot.say('put a number between 1 and 10')
-        for chance in range(1,4):
-            while True:
-                msg = await bot.wait_for_message(check=is_digit)
-                answer = int(msg.content)
-                if answer > correct:
-                    await bot.say('the anwser is smaller than the correct one.You only have {} use(s) left!'.format(4 - chance))
-                elif answer < correct:
-                    await bot.say('the anwser is larger than the correct one.You only have {} use(s) left!'.format(4 - chance))
-                elif answer == correct:
-                    await bot.say('congrats,you got the right number!')
-                    return False
-                else:
-                    await bot.say('sorry,the anwser was {}'.format(correct))
-                    return False
+        while True:
+            for chance in range(1,6):
+                    msg = await bot.wait_for_message(check=is_digit)
+                    answer = int(msg.content)
+                    if answer > correct:
+                        await bot.say('the anwser is smaller than the correct one.You only have {} use(s) left!'.format(5 - chance))
+                    elif answer < correct:
+                        await bot.say('the anwser is larger than the correct one.You only have {} use(s) left!'.format(5 - chance))
+                    else:
+                        return False
+            if answer == correct:
+                await bot.say('congrats,you got the right number!')
+                return False
+            else:
+                await bot.say('sorry,the anwser was {}'.format(correct))
+                return False
 
 
 @bot.command(pass_context=True)
@@ -407,9 +409,6 @@ async def testcooldown_handler(ctx,error):
 #     if isinstance(error, commands.MissingRequiredArgument):
 #         if error.param.name == 'inp':
 #             await ctx.send("You forgot to give me input to repeat!")
-
-
-
 
 
 
