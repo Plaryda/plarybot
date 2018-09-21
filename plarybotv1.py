@@ -120,20 +120,27 @@ async def rank(ctx,user:discord.Member):
 
 @bot.command()
 async def load(extension):
-    try:
-        bot.load_extension(extension)
-        print('loaded {}'.format(extension))
-    except Exception as error:
-        print('{} cannot be loaded [{}]'.format(extension,error))
+    if ctx.message.author.id == '152976541373038592':
+        try:
+            bot.load_extension(extension)
+            print('loaded {}'.format(extension))
+        except Exception as error:
+            print('{} cannot be loaded [{}]'.format(extension,error))
+    else:
+        raise NotHavePermission
 
 @bot.command()
 async def unload(extension):
-    try:
-        bot.unload_extension(extension)
-        print('unloaded {}'.format(extension))
-    except Exception as error:
-        print('{} cannot be unloaded [{}]'.format(extension,error))
-
+    if ctx.message.author.id == '152976541373038592':
+        try:
+            bot.unload_extension(extension)
+            print('unloaded {}'.format(extension))
+        except Exception as error:
+            print('{} cannot be unloaded [{}]'.format(extension,error))
+    else:
+        raise NotHavePermission
+        
+        
 @bot.command(pass_context=True)
 async def coinflip(ctx):
     anwser = ['heads!','tails!']
