@@ -10,7 +10,7 @@ class Music:
         self.bot = bot
 
     async def on_message_delete(self,message):
-        await self.bot.send_message(message.channel,'message deleted.')
+        print('message deleted')
 
 
     @commands.command()
