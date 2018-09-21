@@ -1,3 +1,6 @@
+#source:https://github.com/Plaryda/plarybot
+#read License.txt before checking
+
 import discord
 import json
 import os
@@ -7,6 +10,7 @@ import random
 import time
 from time import sleep
 import pathlib
+import datetime
 
 
 bot = commands.Bot(command_prefix = "pl")
@@ -14,6 +18,8 @@ bot.remove_command('help')
 user_path = pathlib.Path(__file__).parent.joinpath('users.json')
 def is_digit(msg):
     return msg.content.isdigit()
+
+start_time = time.time()
 
 extensions = ['CommandErrorHandler','Music']
 
@@ -143,6 +149,7 @@ async def info(ctx):
 
     embed.add_field(name='Servers joined:', value='{}'.format(len(bot.servers)))
 
+
     embed.add_field(name='Help server:', value='https://discord.gg/NCvabEC')
 
     embed.set_thumbnail(url='https://cdn.discordapp.com/avatars/152976541373038592/5dcd9767b0b98b8b15411420d00d1270.png?size=1024')
@@ -186,9 +193,19 @@ async def say(ctx,*,content:str):
     await bot.say(content)
 
 
+@bot.command(pass_context=True)
+async def changelog(ctx):
+    text = '``19/9`` - bot is officially 24/7!\n``20/9`` - this command is created;fixed plguess and disabled plspam for time being\n``21/9`` - updated plhelp,added pluptime'
+    await bot.say(text)
 
 
-
+@bot.command(pass_context=True)
+async def uptime(ctx):
+    current_time = time.time()
+    difference = int(round(current_time - start_time))
+    text = str(datetime.timedelta(seconds=difference))
+    await bot.say('Uptime: ``{}``'.format(text))
+    print('debug')
 
 
 
@@ -208,13 +225,16 @@ async def help(ctx):
 
     embed.set_author(name='help')
 
-    embed.add_field(name='Fun',value='``plspam [limit<=10] [message]`` - spams,duh!\n``isay [user] [content]`` - great troll!\n``mythtime`` - will ping you at random time!\n``rps [rock,paper,scissors]`` - plays the rock paper scissors game\n``guess`` - a simple guess game\n``say`` - make the bot to say what you want!\n``bombping [user]`` - pings a user 15 times in one line\n ``coinflip - head or tails?')
+    embed.add_field(name='Fun',value='``plspam [limit<=10] [message]`` - spams,duh!\n``isay [user] [content]`` - great troll!\n``mythtime`` - will ping you at random time!\n``rps [rock,paper,scissors]`` - plays the rock paper scissors game\n``guess`` - a simple guess game\n``say`` - make the bot to say what you want!\n``bombping [user]`` - pings a user 15 times in one line\n ``coinflip`` - head or tails?')
 
-    embed.add_field(name='Utility',value='``serverinfo`` - information about the server\n``info`` - information about the bot\n``shoutouts`` - list of cool people who helped in this bot\n``rank [user]`` - shows a rank of a user\n``premium`` - shows a premium server\n``ping`` pings you')
+    embed.add_field(name='Utility',value='``checkmessages`` - gives how much messages has been sent!\n``getseverid``- gives id of a server!\n``changelog`` - shows update of this bot!\n``serverinfo`` - information about the server\n``info`` - information about the bot\n``shoutouts`` - list of cool people who helped in this bot\n``rank [user]`` - shows a rank of a user\n``premium`` - shows a premium server\n``ping`` pings you\n``vipcheck [user]`` - to check vip status\n``about [user]`` - sends info about a user\n``uptime`` - gives uptime of the bot')
+
+    embed.add_field(name='Music',value='Coming Soon!')
 
     embed.set_footer(text='having problems? dm plary#3400 or join the help server!Server link = https://discord.gg/NCvabEC')
 
     await bot.send_message(author,embed=embed)
+    await bot.say(':white_check_mark: help has been sent to you!')
 
 
 @bot.command(pass_context=True)
@@ -259,13 +279,7 @@ async def spam(ctx,times:int,*,content:str):
                 await bot.say('max is 10,says god sans')
         else:
             await bot.say('forgot one argument')
-            
-@bot.command(pass_context=True)
-async def changelog(ctx):
-    text = '``19/9`` - bot is officially 24/7!\n``20/9`` - this command is created;fixed plguess and disabled plspam for time being'
-    await bot.say(text)
-            
-              
+
 @bot.command(pass_context=True)
 async def rps(ctx,anwser:str):
     anwsers = ['rock','paper','scissors']
@@ -298,11 +312,11 @@ async def rps(ctx,anwser:str):
 async def mythtime(ctx):
     while True:
         await bot.say('the time starts now,what could it be?')
-        myth2 = random.randint(1,10)
+        myth2 = random.randint(1,(60**2))
         for myth in range(myth2):
             sleep(1)
             if myth == myth2 - 1:
-                await bot.say('your random timer ended at ``{}s``!'.format(myth2))
+                await bot.say('{}, your random timer ended at ``{}s``!'.format(ctx.message.author.mention,myth2))
                 return False
 
 
@@ -372,7 +386,7 @@ async def vipcheck(ctx,user:discord.Member):
         await bot.say('he/she are vip,cool!')
     else:
         await bot.say('he/she are not vip cri')
-    if ctx.message.author.id == user.id in vip:
+    if ctx.message.author.id == user.id  in vip:
         await bot.say('you are vip,cool!')
     else:
         await bot.say('you are not vip,cri')
@@ -418,7 +432,5 @@ async def testcooldown_handler(ctx,error):
 #     if isinstance(error, commands.MissingRequiredArgument):
 #         if error.param.name == 'inp':
 #             await ctx.send("You forgot to give me input to repeat!")
-
-
 
 bot.run(os.getenv('TOKEN'))
