@@ -21,7 +21,7 @@ def is_digit(msg):
 
 start_time = time.time()
 
-extensions = ['CommandErrorHandler','Music']
+extensions = ['CommandErrorHandler','Music','moderation']
 
 
 
@@ -139,8 +139,7 @@ async def unload(extension):
             print('{} cannot be unloaded [{}]'.format(extension,error))
     else:
         raise NotHavePermission
-        
-        
+
 @bot.command(pass_context=True)
 async def coinflip(ctx):
     anwser = ['heads!','tails!']
@@ -202,7 +201,7 @@ async def say(ctx,*,content:str):
 
 @bot.command(pass_context=True)
 async def changelog(ctx):
-    text = '``19/9`` - bot is officially 24/7!\n``20/9`` - this command is created;fixed plguess and disabled plspam for time being\n``21/9`` - updated plhelp,added pluptime'
+    text = '``19/9`` - bot is officially 24/7!\n``20/9`` - this command is created;fixed plguess and disabled plspam for time being\n``22/9`` - bot added moderation commands'
     await bot.say(text)
 
 
@@ -229,14 +228,13 @@ async def help(ctx):
     embed = discord.Embed(
         color = discord.Colour.orange()
     )
-
     embed.set_author(name='help')
 
     embed.add_field(name='Fun',value='``plspam [limit<=10] [message]`` - spams,duh!\n``isay [user] [content]`` - great troll!\n``mythtime`` - will ping you at random time!\n``rps [rock,paper,scissors]`` - plays the rock paper scissors game\n``guess`` - a simple guess game\n``say`` - make the bot to say what you want!\n``bombping [user]`` - pings a user 15 times in one line\n ``coinflip`` - head or tails?')
 
     embed.add_field(name='Utility',value='``checkmessages`` - gives how much messages has been sent!\n``getseverid``- gives id of a server!\n``changelog`` - shows update of this bot!\n``serverinfo`` - information about the server\n``info`` - information about the bot\n``shoutouts`` - list of cool people who helped in this bot\n``rank [user]`` - shows a rank of a user\n``premium`` - shows a premium server\n``ping`` pings you\n``vipcheck [user]`` - to check vip status\n``about [user]`` - sends info about a user\n``uptime`` - gives uptime of the bot')
 
-    embed.add_field(name='Music',value='Coming Soon!')
+    embed.add_field(name='Moderation',value='``kick`` - kicks a user \n``ban`` - bans a user')
 
     embed.set_footer(text='having problems? dm plary#3400 or join the help server!Server link = https://discord.gg/NCvabEC')
 
@@ -319,7 +317,7 @@ async def rps(ctx,anwser:str):
 async def mythtime(ctx):
     while True:
         await bot.say('the time starts now,what could it be?')
-        myth2 = random.randint(1,(60**2))
+        myth2 = random.randint(1,(10))
         for myth in range(myth2):
             sleep(1)
             if myth == myth2 - 1:
