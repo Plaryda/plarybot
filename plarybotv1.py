@@ -108,7 +108,7 @@ async def level_up(users,user,channel):
 async def rank(ctx,user:discord.Member):
     with open('users.json', 'r') as f:
      try:
-      vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322','424972995535306763']
+      vip = ['444015857400807424','152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322','424972995535306763']
       data = json.load(f)
       embed = discord.Embed(title='Name User', description='{}'.format(user), color=0xeee657)
       embed.add_field(name='Level:',value='{}'.format((data[user.id]['level'])))
@@ -387,7 +387,7 @@ async def timer(ctx,time:int):
 
 @bot.command(pass_context=True)
 async def vipcheck(ctx,user:discord.Member):
-    vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322']
+    vip = ['444015857400807424','152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322']
     if user.id in vip:
         await bot.say('he/she are vip,cool!')
     else:
