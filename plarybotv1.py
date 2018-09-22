@@ -20,6 +20,7 @@ def is_digit(msg):
     return msg.content.isdigit()
 
 start_time = time.time()
+fullda = time.strftime("%a, %d %b %Y %H:%M ", time.gmtime())
 
 extensions = ['CommandErrorHandler','Music','moderation']
 
@@ -107,7 +108,7 @@ async def level_up(users,user,channel):
 async def rank(ctx,user:discord.Member):
     with open('users.json', 'r') as f:
      try:
-      vip = ['444015857400807424','152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322','424972995535306763']
+      vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322','424972995535306763']
       data = json.load(f)
       embed = discord.Embed(title='Name User', description='{}'.format(user), color=0xeee657)
       embed.add_field(name='Level:',value='{}'.format((data[user.id]['level'])))
@@ -210,7 +211,7 @@ async def uptime(ctx):
     current_time = time.time()
     difference = int(round(current_time - start_time))
     text = str(datetime.timedelta(seconds=difference))
-    await bot.say('Uptime: ``{}``'.format(text))
+    await bot.say('Uptime: ``{}``\nStart Time: ``{}``'.format(text,fullda))
     print('debug')
 
 
@@ -386,12 +387,15 @@ async def timer(ctx,time:int):
 
 @bot.command(pass_context=True)
 async def vipcheck(ctx,user:discord.Member):
-    vip = ['444015857400807424','152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322']
+    vip = ['152976541373038592','409137017755140097','472382614347448360','177840117057191937','392986213113528322']
     if user.id in vip:
         await bot.say('he/she are vip,cool!')
     else:
         await bot.say('he/she are not vip cri')
-    
+    if ctx.message.author.id == user.id  in vip:
+        await bot.say('you are vip,cool!')
+    else:
+        await bot.say('you are not vip,cri')
 
 @bot.command(pass_context=True)
 async def checkmessages(ctx):
