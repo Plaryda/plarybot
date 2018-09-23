@@ -245,7 +245,7 @@ async def help(ctx):
 
 @bot.command(pass_context=True)
 async def serverinfo(ctx):
-    servers = ['152977006978531329','399460952359305219','475209454447755275','424972995535306763']
+    servers = ['493074728714764310','152977006978531329','399460952359305219','475209454447755275','424972995535306763']
     embed = discord.Embed(name="{}'s info".format(ctx.message.server.name), description="Here's what I could find.", color=0x00ff00)
     embed.set_author(name="{}".format(ctx.message.server.name))
     embed.add_field(name="Name", value=ctx.message.server.name, inline=True)
@@ -342,7 +342,7 @@ async def getserverid(ctx):
 
 @bot.command(pass_context=True)
 async def premium(ctx):
-    servers = ['152977006978531329','399460952359305219','475209454447755275','424972995535306763']
+    servers = ['493074728714764310','152977006978531329','399460952359305219','475209454447755275','424972995535306763']
     if ctx.message.server.id in servers:
         await bot.send_message(ctx.message.channel,'This server is premium!')
     else:
